@@ -17,12 +17,12 @@ jobs:
   build:
     runs-on: ubuntu-22.04  # Uses GitHub-hosted runner
     environment: dev
-    # permissions:
-    #   contents: read
-    #   packages: write
-    #   # This is used to complete the identity challenge
-    #   # with sigstore/fulcio when running outside of PRs.
-    #   id-token: write
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
     outputs:
       image_tag: ${{ steps.variables.outputs.image_tag }}
       env: ${{ steps.variables.outputs.env }}
@@ -84,9 +84,9 @@ jobs:
     # if: ${{ ( github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/' || github.ref == 'refs/heads/main' ) )  }}
     name: Update Tag and Deploy
     runs-on: ubuntu-24.04  # Uses GitHub-hosted runner
-    # permissions:
-    #   contents: 'read'
-    #   id-token: 'write'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - name: Check out my other private repo
@@ -106,6 +106,8 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
           ls
+          echo repository ${{ needs.build.outputs.repo }}
+          echo path_repo ${{ needs.build.outputs.path_repo }}
           for file in $(find ./values -type f -name '*.yaml'); do
             ENV=$(yq e '.ENV' $file)
             if [ "$ENV" = "${{ needs.build.outputs.env }}" ]; then
