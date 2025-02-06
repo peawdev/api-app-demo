@@ -89,9 +89,9 @@ jobs:
       - name: Check out my other private repo
         uses: actions/checkout@v4
         with:
-          repository: peawdev/k8s-calculator-nonprd
+          repository: ${{ needs.build.outputs.repo }}
           token: ${{ secrets.AUTH_GIT }}
-          path: k8s-calculator-nonprd
+          path: ${{ needs.build.outputs.path_repo }}
           ref: main
 
 
@@ -108,7 +108,7 @@ jobs:
             if [ "$ENV" = "${{ needs.build.outputs.env }}" ]; then
               yq e -i '.deployment.tag = strenv(IMAGE)' $file
             fi
-          # echo $file
+            # echo $file
           done
       
       - name: Update repository
