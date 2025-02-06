@@ -108,6 +108,7 @@ jobs:
             if [ "$ENV" = "${{ needs.build.outputs.env }}" ]; then
               yq e -i '.deployment.tag = strenv(IMAGE)' $file
             fi
+          # echo $file
           done
       
       - name: Update repository
