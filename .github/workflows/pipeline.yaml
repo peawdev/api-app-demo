@@ -92,9 +92,9 @@ jobs:
       - name: Check out my other private repo
         uses: actions/checkout@v4
         with:
-          repository: ${{ needs.build.outputs.repo }}
+          repository: peawdev/k8s-calculator-nonprd
           token: ${{ secrets.AUTH_GIT }}
-          path: ${{ needs.build.outputs.path_repo }}
+          path: k8s-calculator-nonprd
           ref: main
 
 
