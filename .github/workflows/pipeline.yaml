@@ -6,6 +6,9 @@ on:
     branches:
       - main
       - develop
+      - releases/**
+    tags:        
+      - v*
 
 env:
   IMAGE_NAME: peaw-api
@@ -103,14 +106,11 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
           ls
-          echo ${{ needs.build.outputs.path_repo }}
-          echo ${{ needs.build.outputs.repo }}
           for file in $(find ./values -type f -name '*.yaml'); do
             ENV=$(yq e '.ENV' $file)
             if [ "$ENV" = "${{ needs.build.outputs.env }}" ]; then
-              yq e -i '.deployment.tag = strenv(IMAGE)' $file
+              yq e -i '.API.tag = strenv(IMAGE)' $file
             fi
-            # echo $file
           done
       
       - name: Update repository
@@ -121,5 +121,4 @@ jobs:
           git add .
           git commit -am "release: ${{ env.IMAGE_NAME }} env: ${{ needs.build.outputs.env }} version: ${{ needs.build.outputs.image_tag }}"
           git push origin main
-
 
