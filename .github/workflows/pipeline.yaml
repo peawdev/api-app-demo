@@ -8,7 +8,7 @@ on:
       - develop
 
 env:
-  IMAGE_NAME: kong-api
+  IMAGE_NAME: peaw-api
 
 jobs:
   build:
